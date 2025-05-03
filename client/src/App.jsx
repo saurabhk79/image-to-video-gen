@@ -1,22 +1,25 @@
 // App.jsx
-import { useState } from 'react';
-import UploadForm from './components/UploadForm';
-import VideoResult from './components/VideoResult';
-import { config } from './config';
+import { useState } from "react";
+import UploadForm from "./components/UploadForm";
+import VideoResult from "./components/VideoResult";
+import { config } from "./config";
 
 export default function App() {
-  const [step, setStep] = useState('upload');
-  const [videoUrl, setVideoUrl] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [videoData, setVideoData] = useState(null);
 
   const handleUpload = async (formData) => {
-    setStep('processing');
     try {
-      const res = await fetch(config.backendUrl +'/api/upload', {
-        method: 'POST',
-        body: formData,
+      // const res = await fetch(config.backendUrl + "/api/upload_image", {
+      //   method: "POST",
+      //   body: formData,
+      // });
+      // const data = await res.json();
+      // setVideoData(data);
+      setVideoData({
+        id: "12496ee0-e857-498e-ae16-cc6d5fc61381:veo2/image-to-video",
       });
-      const data = await res.json();
-      setVideoUrl(data.videoUrl);
+      setIsProcessing(true);
     } catch (err) {
       console.error(err);
     }
@@ -27,15 +30,18 @@ export default function App() {
       <div className="flex w-full max-w-6xl gap-4 transition-all">
         <div
           className={`w-full md:w-1/2 transition-transform duration-500 ${
-            step === 'processing' ? '-translate-x-1/6' : 'translate-x-0'
+            isProcessing ? "-translate-x-1/6" : "translate-x-0"
           }`}
         >
-          <UploadForm onUpload={handleUpload} disabled={step === 'processing'} />
+          <UploadForm onUpload={handleUpload} disabled={isProcessing} />
         </div>
 
-        {step === 'processing' && (
+        {isProcessing && (
           <div className="w-full md:w-1/2">
-            <VideoResult videoUrl={videoUrl} onBack={() => setStep('upload')} />
+            <VideoResult
+              videoData={videoData}
+              onBack={() => setStep("upload")}
+            />
           </div>
         )}
       </div>
