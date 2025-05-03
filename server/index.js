@@ -4,7 +4,13 @@ require("dotenv").config();
 var cors = require("cors");
 const { v2: cloudinary } = require("cloudinary");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const mongoose = require("mongoose");
+
 const { uploadImageToModel, getVideoFromModel } = require("./helper/api-calls");
+const {
+  createNewHistory,
+  findByGenerationId,
+} = require("./helper/history-service");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -14,6 +20,15 @@ cloudinary.config({
 
 const app = express();
 const PORT = 3300;
+
+mongoose
+  .connect(process.env.MONGO_PASS)
+  .then(() => {
+    console.log("connected");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 app.use(cors());
 app.use(express.json());
@@ -44,6 +59,13 @@ app.post("/api/upload_image", imageUpload.single("image"), async (req, res) => {
     const { file, body } = req;
     const data = await uploadImageToModel(file, body.instructions);
 
+    await createNewHistory({
+      image_url: file.path,
+      generation_id: data.id,
+      prompt_instructions: body?.instructions,
+      status: data?.status,
+    });
+
     return res.status(200).json({ data });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error!" });
@@ -54,9 +76,20 @@ app.get("/api/upload_status", async (req, res) => {
   try {
     const { generation_id } = req.query;
 
-    const response = await getVideoFromModel(generation_id);
+    const history = await findByGenerationId(generation_id);
 
-    return res.status(200).json({ data: response });
+    if (!history) {
+      return res.status(404).json({ message: "Invalid Generation Id" });
+    }
+
+    const { data } = await getVideoFromModel(generation_id);
+
+    history.image_url = data?.video?.url;
+    history.status = data?.status;
+
+    await history.save();
+
+    return res.status(200).json({ data });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error!" });
   }
