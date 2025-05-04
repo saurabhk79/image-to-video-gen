@@ -15,8 +15,12 @@ export default function App() {
         body: formData,
       });
       const data = await res.json();
-      setVideoData(data);
-      setIsProcessing(true);
+      if (data?.id) {
+        setVideoData(data);
+        setIsProcessing(true);
+      } else {
+        alert("Something went wrong!")
+      }
     } catch (err) {
       console.error(err);
     }
