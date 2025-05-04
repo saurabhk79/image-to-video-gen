@@ -10,15 +10,12 @@ export default function App() {
 
   const handleUpload = async (formData) => {
     try {
-      // const res = await fetch(config.backendUrl + "/api/upload_image", {
-      //   method: "POST",
-      //   body: formData,
-      // });
-      // const data = await res.json();
-      // setVideoData(data);
-      setVideoData({
-        id: "12496ee0-e857-498e-ae16-cc6d5fc61381:veo2/image-to-video",
+      const res = await fetch(config.backendUrl + "/api/upload_image", {
+        method: "POST",
+        body: formData,
       });
+      const data = await res.json();
+      setVideoData(data);
       setIsProcessing(true);
     } catch (err) {
       console.error(err);

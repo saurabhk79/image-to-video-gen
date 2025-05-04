@@ -21,7 +21,6 @@ async function uploadImageToModel(file, instructions) {
     );
 
     const data = await response.json();
-    console.log("🚀 ~ uploadImageToModel ~ data:", data)
     return data;
   } catch (error) {
     throw error;
@@ -42,7 +41,6 @@ async function getVideoFromModel(generation_id) {
     );
 
     const data = await response.json();
-    console.log("🚀 ~ getVideoFromModel ~ data:", data);
 
     return data;
   } catch (error) {

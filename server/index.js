@@ -57,7 +57,8 @@ app.get("/", (req, res) => {
 app.post("/api/upload_image", imageUpload.single("image"), async (req, res) => {
   try {
     const { file, body } = req;
-    const data = await uploadImageToModel(file, body.instructions);
+    const instructions = body.instructions || 'Make whatever there is moving!'
+    const data = await uploadImageToModel(file, instructions);
 
     await createNewHistory({
       image_url: file.path,

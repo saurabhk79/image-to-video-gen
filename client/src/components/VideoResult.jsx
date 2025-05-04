@@ -14,13 +14,12 @@ export default function VideoResult({ videoData, onBack }) {
         );
         const { data } = await res.json();
 
-        console.log("🚀 ~ interval ~ data:", data);
         if (data.status === "completed") {
           setVideoUrl(data.video.url);
           clearInterval(interval);
         }
       } catch (err) {
-        console.log("🚀 ~ interval ~ err:", err);
+        console.error(err);
       }
     }, 2000);
 
