@@ -12,7 +12,7 @@ export default function VideoResult({ videoData, onBack }) {
         const res = await fetch(
           config.backendUrl + "/api/upload_status?generation_id=" + videoData.id
         );
-        const data = await res.json();
+        const { data } = await res.json();
 
         console.log("🚀 ~ interval ~ data:", data);
         if (data.status === "completed") {
