@@ -83,7 +83,8 @@ CLOUDINARY_API_SECRET=cloudinary_api_secret_here
 
 AIMLAPI_KEY=aimlapi_key_here
 MONGO_PASS=mongo_url_here
-
+---
+VITE_BACKEND_URL=your_backend_url # for the env in the client(frontend)
 
 ---
 ## 🖥️ Local Setup
