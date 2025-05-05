@@ -1,4 +1,3 @@
-// components/UploadForm.jsx
 import { useState } from 'react';
 
 export default function UploadForm({ onUpload, disabled }) {

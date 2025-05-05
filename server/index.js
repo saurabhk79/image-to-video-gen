@@ -83,9 +83,9 @@ app.get("/api/upload_status", async (req, res) => {
       return res.status(404).json({ message: "Invalid Generation Id" });
     }
 
-    const { data } = await getVideoFromModel(generation_id);
+    const data = await getVideoFromModel(generation_id);
 
-    history.image_url = data?.video?.url;
+    history.video_url = data?.video?.url;
     history.status = data?.status;
 
     await history.save();

@@ -1,4 +1,3 @@
-// App.jsx
 import { useState } from "react";
 import UploadForm from "./components/UploadForm";
 import VideoResult from "./components/VideoResult";
@@ -14,12 +13,12 @@ export default function App() {
         method: "POST",
         body: formData,
       });
-      const data = await res.json();
+      const { data } = await res.json();
       if (data?.id) {
         setVideoData(data);
         setIsProcessing(true);
       } else {
-        alert("Something went wrong!")
+        alert("Something went wrong!");
       }
     } catch (err) {
       console.error(err);
