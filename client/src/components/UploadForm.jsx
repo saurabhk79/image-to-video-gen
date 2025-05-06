@@ -2,18 +2,15 @@ import { useState } from 'react';
 
 export default function UploadForm({ onUpload, disabled }) {
   const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
   const [instructions, setInstructions] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!file && !imageUrl) return alert('Please upload a file or provide an image URL.');
+    if (!file) return alert('Please upload a file.');
 
     const formData = new FormData();
     if (file) {
       formData.append('image', file);
-    } else {
-      formData.append('imageUrl', imageUrl);
     }
     formData.append('instructions', instructions);
     onUpload(formData);
@@ -30,24 +27,8 @@ export default function UploadForm({ onUpload, disabled }) {
           accept="image/*"
           onChange={(e) => {
             setFile(e.target.files[0]);
-            setImageUrl('');
           }}
           className="file-input file-input-bordered w-full"
-          disabled={disabled}
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Or enter image URL:</label>
-        <input
-          type="url"
-          placeholder="Enter image url here..."
-          value={imageUrl}
-          onChange={(e) => {
-            setImageUrl(e.target.value);
-            setFile(null);
-          }}
-          className="input input-bordered w-full"
           disabled={disabled}
         />
       </div>
