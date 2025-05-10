@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-export default function UploadForm({ onUpload, disabled }) {
+export default function UploadForm({ onUpload, disabled, isSubmitting }) {
   const [file, setFile] = useState(null);
   const [instructions, setInstructions] = useState('');
 
@@ -9,25 +9,28 @@ export default function UploadForm({ onUpload, disabled }) {
     if (!file) return alert('Please upload a file.');
 
     const formData = new FormData();
-    if (file) {
-      formData.append('image', file);
-    }
+    formData.append('image', file);
     formData.append('instructions', instructions);
     onUpload(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="card bg-base-100 shadow-xl p-6">
+    <form
+      onSubmit={handleSubmit}
+      className={`card bg-base-100 shadow-xl p-6 transition-all duration-300 ${
+        isSubmitting ? 'opacity-60 pointer-events-none' : ''
+      }`}
+    >
       <h2 className="card-title mb-4">Upload an Image</h2>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Upload from device:</label>
+        <label className="block text-sm font-medium mb-1">
+          Upload from device:
+        </label>
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => {
-            setFile(e.target.files[0]);
-          }}
+          onChange={(e) => setFile(e.target.files[0])}
           className="file-input file-input-bordered w-full"
           disabled={disabled}
         />
@@ -42,8 +45,13 @@ export default function UploadForm({ onUpload, disabled }) {
         disabled={disabled}
       ></textarea>
 
-      <button type="submit" className="btn btn-primary w-full" disabled={disabled}>
-        Submit
+      <button
+        type="submit"
+        className="btn btn-primary w-full flex items-center justify-center gap-2"
+        disabled={disabled || isSubmitting}
+      >
+        {disabled && <span className="loading loading-spinner loading-sm"></span>}
+        {disabled ? 'Processing...' : 'Submit'}
       </button>
     </form>
   );
