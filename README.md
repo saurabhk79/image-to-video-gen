@@ -67,9 +67,9 @@ Used **Google VEO-2 (Image-to-Video)** model via API.
 
 Make sure you have these installed:
 
-- [Node.js (v18+)](https://nodejs.org/)
-- [MongoDB (optional)](https://www.mongodb.com/)
-- A free [Cloudinary](https://cloudinary.com/) account
+- [Node.js]
+- [MongoDB]
+- A free [Cloudinary] account
 - API access to [Google VEO-2]
 
 ---
@@ -83,7 +83,9 @@ CLOUDINARY_API_SECRET=cloudinary_api_secret_here
 
 AIMLAPI_KEY=aimlapi_key_here
 MONGO_PASS=mongo_url_here
+
 ---
+
 VITE_BACKEND_URL=your_backend_url # for the env in the client(frontend)
 
 ---

@@ -50,26 +50,42 @@ app.get("/", (req, res) => {
 
     return res.sendStatus(200);
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error!" });
+    return res.status(500).json({
+      message: "Internal server error!",
+      error: {
+        name: error.name,
+        message: error.message,
+      },
+    });
   }
 });
 
 app.post("/api/upload_image", imageUpload.single("image"), async (req, res) => {
   try {
     const { file, body } = req;
-    const instructions = body.instructions || 'Make whatever there is moving!'
-    const data = await uploadImageToModel(file, instructions);
+    const instructions = body.instructions || "Make whatever there is moving!";
 
-    await createNewHistory({
-      image_url: file.path,
-      generation_id: data.id,
-      prompt_instructions: body?.instructions,
-      status: data?.status,
-    });
+    const data = await uploadImageToModel(file, instructions);
+    const history = await findByGenerationId(data?.id);
+
+    if (!history) {
+      await createNewHistory({
+        image_url: file.path,
+        generation_id: data.id,
+        prompt_instructions: body?.instructions,
+        status: data?.status,
+      });
+    }
 
     return res.status(200).json({ data });
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error!" });
+    return res.status(500).json({
+      message: "Internal server error!",
+      error: {
+        name: error.name,
+        message: error.message,
+      },
+    });
   }
 });
 
@@ -92,7 +108,13 @@ app.get("/api/upload_status", async (req, res) => {
 
     return res.status(200).json({ data });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error!" });
+    return res.status(500).json({
+      message: "Internal Server Error!",
+      error: {
+        name: error.name,
+        message: error.message,
+      },
+    });
   }
 });
 
